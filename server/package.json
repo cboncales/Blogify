@@ -1,0 +1,27 @@
+{
+  "name": "blogify-server",
+  "version": "1.0.0",
+  "description": "Backend server for Blogify blog application",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "db:init": "node config/initDb.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "pg": "^8.11.3",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2",
+    "cors": "^2.8.5",
+    "helmet": "^7.1.0",
+    "express-validator": "^7.0.1",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "keywords": ["blog", "api", "nodejs", "postgresql"],
+  "author": "",
+  "license": "MIT"
+} 
