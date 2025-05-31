@@ -1,23 +1,31 @@
 {
   "name": "blogify",
   "version": "1.0.0",
-  "description": "A simple blog web application with authentication and CRUD operations",
+  "description": "A modern, full-stack blog platform built with React, Node.js, and PostgreSQL",
   "scripts": {
-    "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "server": "cd server && npm run dev",
-    "client": "cd client && npm start",
-    "install-deps": "npm install && cd server && npm install && cd ../client && npm install"
-  },
-  "dependencies": {
-    "concurrently": "^8.2.2"
+    "install:client": "cd client && npm install",
+    "install:server": "cd server && npm install",
+    "install:all": "npm run install:client && npm run install:server",
+    "dev:client": "cd client && npm run dev",
+    "dev:server": "cd server && npm run dev",
+    "build:client": "cd client && npm run build",
+    "start:client": "cd client && npm run preview",
+    "start:server": "cd server && npm start"
   },
   "keywords": [
     "blog",
     "react",
-    "node",
+    "nodejs",
     "postgresql",
-    "jwt"
+    "fullstack"
   ],
-  "author": "",
-  "license": "MIT"
+  "author": "Your Name",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/blogify.git"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
 }
