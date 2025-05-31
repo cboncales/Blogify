@@ -1,18 +1,26 @@
 const { Pool } = require("pg");
 require("dotenv").config();
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  host: process.env.DB_HOST || "localhost",
-  port: process.env.DB_PORT || 5432,
-  database: process.env.DB_NAME || "blogify",
-  user: process.env.DB_USER || "postgres",
-  password: process.env.DB_PASSWORD,
+// Configure database connection
+const dbConfig = {
   ssl:
     process.env.NODE_ENV === "production"
       ? { rejectUnauthorized: false }
       : false,
-});
+};
+
+// Use either connection string (for production) or individual params (for development)
+if (process.env.DATABASE_URL) {
+  dbConfig.connectionString = process.env.DATABASE_URL;
+} else {
+  dbConfig.host = process.env.DB_HOST || "localhost";
+  dbConfig.port = process.env.DB_PORT || 5432;
+  dbConfig.database = process.env.DB_NAME || "blogify";
+  dbConfig.user = process.env.DB_USER || "postgres";
+  dbConfig.password = process.env.DB_PASSWORD;
+}
+
+const pool = new Pool(dbConfig);
 
 // Test the connection
 pool.on("connect", () => {
