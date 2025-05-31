@@ -1,28 +1,17 @@
-const express = require("express");
-const cors = require("cors");
-const helmet = require("helmet");
-require("dotenv").config();
+const { Pool } = require("pg");
 
-// Import routes
-const authRoutes = require("./routes/auth");
-const postsRoutes = require("./routes/posts");
-const commentsRoutes = require("./routes/comments");
+// Use production environment variables
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl:
+    process.env.NODE_ENV === "production"
+      ? { rejectUnauthorized: false }
+      : false,
+});
 
-// Import database
-const pool = require("./config/database");
-
-const app = express();
-const PORT = process.env.PORT || 5000;
-
-// Middleware
-app.use(helmet());
-app.use(cors());
-app.use(express.json());
-
-// Initialize database tables on startup
-const initializeDatabase = async () => {
+const createTables = async () => {
   try {
-    console.log("🚀 Checking/Initializing database tables...");
+    console.log("🚀 Initializing production database...");
 
     // Create users table
     await pool.query(`
@@ -99,53 +88,15 @@ const initializeDatabase = async () => {
       EXECUTE FUNCTION update_updated_at_column()
     `);
 
-    console.log("✅ Database tables initialized successfully!");
+    console.log("✅ Production database initialized successfully!");
+    console.log("Tables created: users, posts, comments");
+    console.log("🚀 Your app is ready to use!");
   } catch (error) {
     console.error("❌ Error initializing database:", error);
-    // Don't exit the process, just log the error
-  }
-};
-
-// Routes
-app.use("/api/auth", authRoutes);
-app.use("/api/posts", postsRoutes);
-app.use("/api", commentsRoutes);
-
-// Health check route
-app.get("/", (req, res) => {
-  res.json({ message: "Blogify API is running!" });
-});
-
-app.get("/api", (req, res) => {
-  res.json({ message: "Blogify API is running!" });
-});
-
-// Error handling middleware
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ message: "Something went wrong!" });
-});
-
-// 404 handler
-app.use("*", (req, res) => {
-  res.status(404).json({ message: "Route not found" });
-});
-
-// Start server with database initialization
-const startServer = async () => {
-  try {
-    // Initialize database first
-    await initializeDatabase();
-
-    // Then start the server
-    app.listen(PORT, () => {
-      console.log(`🚀 Server is running on port ${PORT}`);
-      console.log(`📱 Environment: ${process.env.NODE_ENV || "development"}`);
-    });
-  } catch (error) {
-    console.error("❌ Failed to start server:", error);
     process.exit(1);
+  } finally {
+    await pool.end();
   }
 };
 
-startServer();
+createTables();
