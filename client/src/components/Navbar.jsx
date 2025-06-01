@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { PenSquare, User, LogOut, Menu, X } from "lucide-react";
+import { User, LogOut, Menu, X } from "lucide-react";
 import { useState } from "react";
 
 const Navbar = () => {
@@ -40,7 +40,11 @@ const Navbar = () => {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
-            <PenSquare className="h-8 w-8 text-primary-600" />
+            <img
+              src="/images/logo1.png"
+              alt="Blogify Logo"
+              className="h-8 w-8 object-contain"
+            />
             <span className="text-xl font-bold text-gray-900">Blogify</span>
           </Link>
 
